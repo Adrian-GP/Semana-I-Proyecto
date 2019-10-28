@@ -2,9 +2,12 @@
 
 <head>
     <!-- Load the latest version of TensorFlow.js -->
-    <script src="https://unpkg.com/@tensorflow/tfjs"></script>
-    <script src="https://unpkg.com/@tensorflow-models/mobilenet"></script>
-    <script src="https://unpkg.com/@tensorflow-models/knn-classifier"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/styles.css">
+
+
 
 </head>
 
@@ -12,36 +15,52 @@
     <!--<div id="console"></div>-->
     <!-- Add an image that we will use to test -->
     <!--<img id="img" crossorigin src="https://i.imgur.com/JlUvsxa.jpg" width="227" height="227"/>-->
-    <video autoplay playsinline muted id="webcam" width="224" height="224"></video>
-    <button id="add-image">Add images</button>
-    <button id="class-coca">Coca-cola</button>
-    <button id="class-andatti">Andatti</button>
-    <button id="class-coca-zero">Coca-cola Zero</button>
-    <button id="class-sabritas">Sabritas</button>
-    <button id="class-emperador">Emperador</button>
-    <button id="class-hershey">Hersheys</button>
-    <button id="class-panditas">Panditas</button>
-    <button id="class-donitas">Donitas Bimbo</button>
-    <button id="class-maruchan">Maruchan</button>
-    <button id="class-jumex">Jumex Mango</button>
-    <select id="drop-down-elem">
-        <option value="0">Coca-cola</option>
-        <option value="1">Andatti</option>
-        <option value="2">Coca-cola Zero</option>
-        <option value="3">Sabritas</option>
-        <option value="4">Emperador</option>
-        <option value="5">Hershey's</option>
-        <option value="6">Panditas</option>
-        <option value="7">Donitas Bimbo</option>
-        <option value="8">Maruchan</option>
-        <option value="9">Jumex Mango</option>
-    </select>
+    <video autoplay playsinline muted id="webcam" width="600" height="400"></video>
+    <div style="display:block;">
+        <button class="my-btn" id="class-coca">Coca-cola</button>
+        <button class="my-btn" id="class-andatti">Andatti</button>
+        <button class="my-btn" id="class-coca-zero">Coca-cola Zero</button>
+        <button class="my-btn" id="class-sabritas">Sabritas</button>
+        <button class="my-btn" id="class-emperador">Emperador</button>
+        <button class="my-btn" id="class-hershey">Hersheys</button>
+        <button class="my-btn" id="class-panditas">Panditas</button>
+        <button class="my-btn" id="class-donitas">Donitas Bimbo</button>
+        <button class="my-btn" id="class-maruchan">Maruchan</button>
+        <button class="my-btn" id="class-jumex">Jumex Mango</button>
+    </div>
+    <div style="margin:20px 0;">
+        <button class="my-btn" id="add-image">Add images</button>
+        <select id="drop-down-elem">
+            <option value="0">Coca-cola</option>
+            <option value="1">Andatti</option>
+            <option value="2">Coca-cola Zero</option>
+            <option value="3">Sabritas</option>
+            <option value="4">Emperador</option>
+            <option value="5">Hershey's</option>
+            <option value="6">Panditas</option>
+            <option value="7">Donitas Bimbo</option>
+            <option value="8">Maruchan</option>
+            <option value="9">Jumex Mango</option>
+        </select>
+    </div>
     <!--<button id="class-b">Add B</button>
     <button id="class-c">Add C</button>-->
-    <div>
-        <button id="savemodel">Save model</button>
+    <div style="margin-top:20px;">
+        <button class="my-btn" id="savemodel">Save model</button>
     </div>
     <!-- Load index.js after the content of the page -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@tensorflow/tfjs"></script>
+    <script src="https://unpkg.com/@tensorflow-models/mobilenet"></script>
+    <script src="https://unpkg.com/@tensorflow-models/knn-classifier"></script>
     <script src="js/index.js"></script>
 </body>
 
