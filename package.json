@@ -1,0 +1,22 @@
+{
+  "name": "semana-i",
+  "version": "1.0.0",
+  "description": "This is the recognizer of Semana I's Proyect",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adrian-GP/Semana-I-Proyecto.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adrian-GP/Semana-I-Proyecto/issues"
+  },
+  "homepage": "https://github.com/Adrian-GP/Semana-I-Proyecto#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

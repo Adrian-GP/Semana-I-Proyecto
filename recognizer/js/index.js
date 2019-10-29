@@ -1,4 +1,3 @@
-
 //Realizado el 5/31/2019
 
 //Variable para mobilnet
@@ -42,8 +41,15 @@ async function setupWebcam() {
 function knnLoad() {
   //can be change to other source
   console.log("Initiation of KNN Load");
-  console.log(json);
- 
+  /*let json = localStorage.getItem("knnClassifier_BarryPotter");
+  console.log(json);*/
+
+  console.log("try to get json");
+  $.getJSON( "recognizer/json/knnClassifierBarryPotter.json", function(obj) {
+    $.each(obj, function(key, value) {
+           console.log(value);
+    });
+   });
   
 }
 
