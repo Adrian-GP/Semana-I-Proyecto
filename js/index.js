@@ -153,6 +153,8 @@ async function app() {
     document.getElementById('class-maruchan').addEventListener('click', () => addExample(8));
     document.getElementById('class-jumex').addEventListener('click', () => addExample(9));
 
+    document.getElementById('savemodel').addEventListener('click', () => save());
+
     //document.getElementById('class-c').addEventListener('click', () => addExample(2));
 
     while (true) {
@@ -180,8 +182,28 @@ async function app() {
 
 app();
 
-/*function addImage(){
-    var dropdown = document.getElementById("drop-down-elem")
-    var selectedClass = dropdown.options[dropdown.selectedIndex].value;
-    console.log(selectedClass)
-}*/
+
+
+
+function save() {
+	//Aqui va tu codigo
+	dataset = classifier.getClassifierDataset();
+	//
+   var datasetObj = {}
+   Object.keys(dataset).forEach((key) => {
+     let data = dataset[key].dataSync();
+     datasetObj[key] = Array.from(data);
+   });
+   let jsonStr = JSON.stringify(datasetObj);
+   localStorage.setItem("knnClassifier_BarryPotter", jsonStr);
+   saveData(jsonStr, 'knnClassifierBarryPotter.json');
+ }
+
+ function saveData(text, name) {
+  const a = document.createElement('a');
+  const type = name.split(".").pop();
+  a.href = URL.createObjectURL( new Blob([text], { type:`text/${type === "txt" ? "plain" : type}` }) );
+  a.download = name;
+  a.click();
+}
+
