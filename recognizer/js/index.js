@@ -45,12 +45,17 @@ function knnLoad() {
   console.log(json);*/
 
   console.log("try to get json");
-  $.getJSON( "recognizer/json/knnClassifierBarryPotter.json", function(obj) {
-    $.each(obj, function(key, value) {
-           console.log(value);
-    });
-   });
-  
+  $.getJSON("recognizer/json/knnClassifierBarryPotter.json", function (data) {
+    console.log(data);
+
+    let tensorObj = data
+    //covert back to tensor
+    classifier.setClassifierDataset((tensorObj))
+
+
+  });
+
+
 }
 
 
@@ -73,111 +78,23 @@ async function app() {
   //Esto se agrego para predecir en cada frame
   while (true) {
     if (classifier.getNumClasses() > 0) {
+      const img = await webcam.capture();
+
       // Get the activation from mobilenet from the webcam.
-      const activation = net.infer(webcamElement, 'conv_preds');
+      const activation = net.infer(img, 'conv_preds');
       // Get the most likely class and confidences from the classifier module.
-      let k = 10;
-      const result = await classifier.predictClass(activation, k);
+      const result = await classifier.predictClass(activation);
 
-      //*************************
+      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango'];
+      document.getElementById('console').innerText = `
+          prediction: ${classes[result.label]}\n
+          probability: ${result.confidences[result.label]}
+        `;
 
-      //Modifica este bloque de acuerdo a tus productos esto se puso como ejemplo
-      // AQUI EMPIEZA
-      const classes = ['Heineken', 'Heineken-Light', 'Heineken can', 'Adidas thermos flask', 'Coca-cola', 'Cafe Andatti', 'Background'];
-      let precio = 0.0;
-      if (result.label == "0") {
-        precio = 1.55;
-      } else if (result.label == "1") {
-        precio = 1.68;
-      } else if (result.label == "2") {
-        precio = 2.83;
-      } else if (result.label == "3") {
-        precio = 19.20;
-      } else if (result.label == "4") {
-        precio = 1.8;
-      } else if (result.label == "5") {
-        precio = 17.50;
-      } else {
-        //console.log('Nada');
-      }
-
-      if ((result.label == "0") && (result.confidences[result.label] >= 0.7)) {
-        document.getElementById('console').innerText = `
-          prediction: ${classes[result.label]}\n
-          probability: ${Math.floor(result.confidences[result.label] * 100)}\n
-          price:$     ${precio}`;
-        document.getElementById("fotos").innerHTML = "<img id=\"image1\" src=\"img/heineken.jpg\" />";
-        //alert('Producto detectado');
-        let producto = 'img/heineken.jpg';
-        oferta('Heineken');
-        await wait(3000);
-        alerta('Heineken', producto, precio);
-        await wait(2000);
-      } else if ((result.label == "1") && (result.confidences[result.label] >= 0.7)) {
-        document.getElementById('console').innerText = `
-          prediction: ${classes[result.label]}\n
-          probability: ${Math.floor(result.confidences[result.label] * 100)}\n
-          price:$     ${precio}`;
-        document.getElementById("fotos").innerHTML = "<img id=\"image2\" src=\"img/light.jpg\" />";
-        //alert('Producto detectado');
-        let producto = 'img/light.jpg';
-        alerta('Heineken Light', producto, precio);
-        await wait(2000);
-      } else if ((result.label == "2") && (result.confidences[result.label] >= 0.7)) {
-        document.getElementById('console').innerText = `
-          prediction: ${classes[result.label]}\n
-          probability: ${Math.floor(result.confidences[result.label] * 100)}\n
-          price:$     ${precio}`;
-        document.getElementById("fotos").innerHTML = "<img id=\"image3\" src=\"img/lata.jpg\" />";
-        //alert('Producto detectado');
-        let producto = 'img/lata.jpg';
-        alerta('Heineken can', producto, precio);
-        await wait(2000);
-      } else if ((result.label == "3") && (result.confidences[result.label] >= 0.9)) {
-        document.getElementById('console').innerText = `
-          prediction: ${classes[result.label]}\n
-          probability: ${Math.floor(result.confidences[result.label] * 100)}\n
-          price:$     ${precio}`;
-        document.getElementById("fotos").innerHTML = "<img id=\"image4\" src=\"img/adidas.jpg\" />";
-        //alert('Producto detectado');
-        let producto = 'img/adidas.jpg';
-        alerta('Adidas thermos flask', producto, precio);
-        await wait(2000);
-      } else if ((result.label == "4") && (result.confidences[result.label] >= 0.7)) {
-        document.getElementById('console').innerText = `
-          prediction: ${classes[result.label]}\n
-          probability: ${Math.floor(result.confidences[result.label] * 100)}\n
-          price:$     ${precio}`;
-        document.getElementById("fotos").innerHTML = "<img id=\"image5\" src=\"img/cocacola.jpg\" />";
-        //alert('Producto detectado');
-        let producto = 'img/cocacola.jpg';
-        alerta('Coca-cola', producto, precio);
-        await wait(2000);
-      } else if ((result.label == "5") && (result.confidences[result.label] >= 0.9)) {
-        document.getElementById('console').innerText = `
-          prediction: ${classes[result.label]}\n
-          probability: ${Math.floor(result.confidences[result.label] * 100)}\n
-          price:$     ${precio}`;
-        document.getElementById("fotos").innerHTML = "<img id=\"image5\" src=\"img/andatti.jpg\" />";
-        //alert('Producto detectado');
-        let producto = 'img/andatti.jpg';
-        alerta('Cafe Andatti', producto, precio);
-        await wait(2000);
-      } else if ((result.label == "6") && (result.confidences[result.label] >= 0.3)) {
-        document.getElementById('console').innerText = `
-          prediction: ${classes[result.label]}\n
-          probability: ${Math.floor(result.confidences[result.label] * 100)}\n
-          price:$     ${precio}`;
-        document.getElementById("fotos").innerHTML = "<img id=\"image5\" src=\"img/fondo.jpg\" />";
-        document.getElementById('total').innerText = `
-            Total: $ ${total}`;
-      }
-      else {
-        //console.log('nada');
-      }
+      // Dispose the tensor to release the memory.
+      img.dispose();
     }
-    // AQUI TERMINA
-    //*************************
+
     await tf.nextFrame();
   }
 }
