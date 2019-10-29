@@ -26,7 +26,7 @@ function knnLoad() {
   console.log(json);*/
 
   console.log("try to get json");
-  $.getJSON("recognizer/json/knnClassifierTest.json", function (data) {
+  $.getJSON("recognizer/json/knnClassifier_BarryPotter.json", function (data) {
     console.log(data);
 
    // let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
@@ -37,7 +37,7 @@ function knnLoad() {
     //covert back to tensor
     console.log(tensorObj);
     classifier.setClassifierDataset(tensorObj)
-    
+
 
   });
 
@@ -60,7 +60,7 @@ async function app() {
 
   console.log('Knn loaded');
   const webcam = await tf.data.webcam(webcamElement);
-  
+
   //Esto se agrego para predecir en cada frame
   while (true) {
     if (classifier.getNumClasses() > 0) {

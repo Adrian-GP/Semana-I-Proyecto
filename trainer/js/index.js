@@ -53,6 +53,16 @@ async function app() {
   console.log('Loading mobilenet..');
   // Load the model.
   net = await mobilenet.load();
+  console.log('Loading KNN..');
+  if(localStorage.getItem("knnClassifier_BarryPotter")!=null){
+    let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
+    Object.keys(tensorObj).forEach((key) => {
+      tensorObj[key] = tf.tensor(tensorObj[key], [Math.floor(tensorObj[key].length / 1000), 1024]);
+    });
+    //covert back to tensor
+    classifier.setClassifierDataset(tensorObj)
+    console.log("Retrieved something.");
+  }
   console.log('Successfully loaded model');
 
   // Create an object from Tensorflow.js data API which could capture image
@@ -193,8 +203,8 @@ function save() {
     datasetObj[key] = Array.from(data);
   });
   let jsonStr = JSON.stringify(datasetObj);
-  localStorage.setItem("knnClassifierTestr", jsonStr);
-  saveData(jsonStr, 'knnClassifierTest.json');
+  localStorage.setItem("knnClassifier_BarryPotter", jsonStr);
+  saveData(jsonStr, 'knnClassifier_BarryPotter.json');
 }
 
 function saveData(text, name) {
@@ -214,4 +224,3 @@ function resizeImage(image){
       return ctx.getImageData();
     });
 }
-
