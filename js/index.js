@@ -2,7 +2,7 @@ const classifier = knnClassifier.create();
 
 const webcamElement = document.getElementById('webcam');
 
-document.getElementById('add-image').addEventListener('click', () => addImage());
+//document.getElementById('add-image').addEventListener('click', () => addImage());
 
 let net;
 
@@ -68,10 +68,13 @@ async function app() {
     const addExample = async classId => {
         // Capture an image from the web camera.
         const img = await webcam.capture();
+        //console.log();
 
         // Get the intermediate activation of MobileNet 'conv_preds' and pass that
         // to the KNN classifier.
         const activation = net.infer(img, 'conv_preds');
+
+        console.log("Added example with classId: "+classId);
 
         // Pass the intermediate activation to the classifier.
         classifier.addExample(activation, classId);
@@ -82,6 +85,17 @@ async function app() {
 
     // When clicking a button, add an example for that class.
     //document.getElementById('class-b').addEventListener('click', () => addExample(1));
+    document.getElementById('class-coca').addEventListener('click', () => addExample(0));
+    document.getElementById('class-andatti').addEventListener('click', () => addExample(1));
+    document.getElementById('class-coca-zero').addEventListener('click', () => addExample(2));
+    document.getElementById('class-sabritas').addEventListener('click', () => addExample(3));
+    document.getElementById('class-emperador').addEventListener('click', () => addExample(4));
+    document.getElementById('class-hersheys').addEventListener('click', () => addExample(5));
+    document.getElementById('class-panditas').addEventListener('click', () => addExample(6));
+    document.getElementById('class-donitas').addEventListener('click', () => addExample(7));
+    document.getElementById('class-maruchan').addEventListener('click', () => addExample(8));
+    document.getElementById('class-jumex').addEventListener('click', () => addExample(9));
+
     //document.getElementById('class-c').addEventListener('click', () => addExample(2));
 
     while (true) {
@@ -93,7 +107,7 @@ async function app() {
             // Get the most likely class and confidences from the classifier module.
             const result = await classifier.predictClass(activation);
 
-            const classes = ['A', 'B', 'C'];
+            const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango'];
             document.getElementById('console').innerText = `
           prediction: ${classes[result.label]}\n
           probability: ${result.confidences[result.label]}
