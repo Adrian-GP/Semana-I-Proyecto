@@ -16,26 +16,7 @@ let total = 0.0;
 let flag = true;
 var wait = ms => new Promise((r, j) => setTimeout(r, ms))
 
-//Rutina para inicializar webcam
-async function setupWebcam() {
-  return new Promise((resolve, reject) => {
-    const navigatorAny = navigator;
-    navigator.getUserMedia = navigator.getUserMedia ||
-      navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
-      navigatorAny.msGetUserMedia;
-    if (navigator.getUserMedia) {
-      navigator.getUserMedia({ video: true },
-        stream => {
-          console.log(webcamElement)
-          webcamElement.srcObject = stream;
-          webcamElement.addEventListener('loadeddata', () => resolve(), false);
-        },
-        error => reject());
-    } else {
-      reject();
-    }
-  });
-}
+
 
 //Esta función cargara al elemento knn los pesos previamente obtenidos en el trainer. hint: usar función setClassifierDataset
 function knnLoad() {
@@ -45,13 +26,18 @@ function knnLoad() {
   console.log(json);*/
 
   console.log("try to get json");
-  $.getJSON("recognizer/json/knnClassifierBarryPotter.json", function (data) {
+  $.getJSON("recognizer/json/knnClassifierTest.json", function (data) {
     console.log(data);
 
-    let tensorObj = data
+   // let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
+   let tensorObj = data;
+    Object.keys(tensorObj).forEach((key) => {
+      tensorObj[key] = tf.tensor(tensorObj[key], [Math.floor(tensorObj[key].length / 1000), 1024]);
+    });
     //covert back to tensor
-    classifier.setClassifierDataset((tensorObj))
-
+    console.log(tensorObj);
+    classifier.setClassifierDataset(tensorObj)
+    
 
   });
 
@@ -73,8 +59,8 @@ async function app() {
   knnLoad();
 
   console.log('Knn loaded');
-  await setupWebcam();
-
+  const webcam = await tf.data.webcam(webcamElement);
+  
   //Esto se agrego para predecir en cada frame
   while (true) {
     if (classifier.getNumClasses() > 0) {

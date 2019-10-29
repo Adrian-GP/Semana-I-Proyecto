@@ -184,39 +184,26 @@ app();
 
 
 function save() {
-
-  let dataset = classifier.getClassifierDataset()
-
+  //Aqui va tu codigo
+  dataset = classifier.getClassifierDataset();
+  //
   var datasetObj = {}
-
   Object.keys(dataset).forEach((key) => {
     let data = dataset[key].dataSync();
-    // use Array.from() so when JSON.stringify() it covert to an array string e.g [0.1,-0.2...]
-    // instead of object e.g {0:"0.1", 1:"-0.2"...}
     datasetObj[key] = Array.from(data);
   });
   let jsonStr = JSON.stringify(datasetObj);
-  localStorage.setItem("knnClassifier", jsonStr);
+  localStorage.setItem("knnClassifierTestr", jsonStr);
   saveData(jsonStr, 'knnClassifierTest.json');
 }
 
-
-
-var saveData = (function () {
-   var a = document.createElement("a");
-   document.body.appendChild(a);
-   a.style = "display: none";
-   return function (data, fileName) {
-       var json = JSON.stringify(data),
-           blob = new Blob([json], {type: "octet/stream"}),
-           url = window.URL.createObjectURL(blob);
-       a.href = url;
-       a.download = fileName;
-       a.click();
-       window.URL.revokeObjectURL(url);
-   };
-
-}());
+function saveData(text, name) {
+  const a = document.createElement('a');
+  const type = name.split(".").pop();
+  a.href = URL.createObjectURL(new Blob([text], { type: `text/${type === "txt" ? "plain" : type}` }));
+  a.download = name;
+  a.click();
+}
 
 function resizeImage(image){
     var canvas = document.createElement("canvas");

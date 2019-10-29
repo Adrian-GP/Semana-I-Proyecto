@@ -15,11 +15,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
     <!--<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>-->
     <!--<script src="https://unpkg.com/@tensorflow-models/mobilenet"></script>-->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1"> </script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"> </script>
+    <script src="https://unpkg.com/@tensorflow/tfjs"></script>
+    <script src="https://unpkg.com/@tensorflow-models/mobilenet"></script>
     <script src="https://unpkg.com/@tensorflow-models/knn-classifier"></script>
-    <script src="sweetalert2.all.min.js"></script>
-    <script src="sweetalert2.min.js"></script>
 
     <h1>
         Computer vision product detector.
@@ -28,13 +26,14 @@
 
 <body>
     <div id='contenedor'>
+            <video autoplay playsinline muted id="webcam" width="600" height="400"></video>
+
         <!--TAbla -->
         <table>
             <!-- Video -->
             <tr>
                 <td>
                     <div id='divVideo'>
-                        <video autoplay playsinline muted id="webcam" width="600" height="400"></video>
                     </div>
                 </td>
                 <!-- Fotos de productos una vez son detectados -->
