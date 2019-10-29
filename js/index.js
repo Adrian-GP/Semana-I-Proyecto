@@ -2,9 +2,8 @@ const classifier = knnClassifier.create();
 
 const webcamElement = document.getElementById('webcam');
 
-//document.getElementById('add-image').addEventListener('click', () => addImage());
-
 let net;
+
 
 // Función de app para predicción de imágenes.
 /*
@@ -25,44 +24,102 @@ async function app() {
 /*
 async function app() {
     console.log('Loading mobilenet..');
-  
+
     // Load the model.
     net = await mobilenet.load();
     console.log('Successfully loaded model');
-    
-    // Create an object from Tensorflow.js data API which could capture image 
+
+    // Create an object from Tensorflow.js data API which could capture image
     // from the web camera as Tensor.
     const webcam = await tf.data.webcam(webcamElement);
     while (true) {
       const img = await webcam.capture();
       const result = await net.classify(img);
-  
+
       document.getElementById('console').innerText = `
         prediction: ${result[0].className}\n
         probability: ${result[0].probability}
       `;
       // Dispose the tensor to release the memory.
       img.dispose();
-  
+
       // Give some breathing room by waiting for the next animation frame to
       // fire.
       await tf.nextFrame();
     }
   }*/
 
-
-
 async function app() {
     console.log('Loading mobilenet..');
-
     // Load the model.
     net = await mobilenet.load();
     console.log('Successfully loaded model');
 
-    // Create an object from Tensorflow.js data API which could capture image 
+    // Create an object from Tensorflow.js data API which could capture image
     // from the web camera as Tensor.
     const webcam = await tf.data.webcam(webcamElement);
 
+    var picReader = new FileReader();
+
+    if(window.File && window.FileList && window.FileReader)
+    {
+      console.log("Entro");
+      $('#add-images').on("change", function(event) {
+      console.log("Entro2");
+      var files = event.target.files; //FileList object
+      var output = document.getElementById("result");
+      for(var i = 0; i< files.length; i++)
+      {
+        var file = files[i];
+        if(file.type.match('image.*')){
+          if(this.files[i].size < 2097152){
+            picReader = new FileReader();
+            picReader.readAsDataURL(file);
+            //var arrayBufferView = new Uint8Array(picReader.readas);
+            //var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
+            console.log(typeof(picReader));
+            //addExampleFromFile("0",picReader.result)
+            picReader.onloadend = function () {
+              var image = new Image();
+              image.src = picReader.result;
+              image.width = 600;
+              image.height = 400;
+              processedImage = tf.browser.fromPixels(image);
+              var dropdown = document.getElementById("drop-down-elem")
+              var selectedClass = dropdown.options[dropdown.selectedIndex].value;
+              addExampleFromFile(selectedClass,processedImage)
+              console.log(picReader.result);
+            }
+          }
+          else{
+            alert("Image Size is too big. Minimum size is 2MB.");
+          }
+        }
+        else{
+            alert("You can only upload image file.");
+        }
+      }
+      });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+
+    const addExampleFromFile = async(classId,img) => {
+        // Capture an image from the web camera.
+
+
+        // Get the intermediate activation of MobileNet 'conv_preds' and pass that
+        // to the KNN classifier.
+        const activation = net.infer(img, 'conv_preds');
+        console.log(classId,img);
+        // Pass the intermediate activation to the classifier.
+        classifier.addExample(activation, classId);
+
+        // Dispose the tensor to release the memory.
+        img.dispose();
+    };
     // Reads an image from the webcam and associates it with a specific class
     // index.
     const addExample = async classId => {
@@ -125,11 +182,8 @@ async function app() {
 
 app();
 
-function addImage(){
-    var dropdown = document.getElementById("drop-down-elem")
-    var selectedClass = dropdown.options[dropdown.selectedIndex].value;
-    console.log(selectedClass)
-}
+
+
 
 function save() {
 	//Aqui va tu codigo
@@ -152,3 +206,4 @@ function save() {
   a.download = name;
   a.click();
 }
+
