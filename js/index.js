@@ -2,8 +2,6 @@ const classifier = knnClassifier.create();
 
 const webcamElement = document.getElementById('webcam');
 
-document.getElementById('add-images').addEventListener('click', () => addImage());
-
 let net;
 
 
@@ -84,7 +82,7 @@ async function app() {
             picReader.onloadend = function () {
               var image = new Image();
               image.src = picReader.result;
-              image.width = 400;
+              image.width = 600;
               image.height = 400;
               processedImage = tf.browser.fromPixels(image);
               var dropdown = document.getElementById("drop-down-elem")
@@ -115,7 +113,7 @@ async function app() {
         // Get the intermediate activation of MobileNet 'conv_preds' and pass that
         // to the KNN classifier.
         const activation = net.infer(img, 'conv_preds');
-
+        console.log(classId,img);
         // Pass the intermediate activation to the classifier.
         classifier.addExample(activation, classId);
 
@@ -153,7 +151,7 @@ async function app() {
             const result = await classifier.predictClass(activation);
 
             const classes = ['A', 'B', 'C'];
-            //document.getElementById('console').innerText = `
+            document.getElementById('console').innerText = `
           prediction: ${classes[result.label]}\n
           probability: ${result.confidences[result.label]}
         `;
