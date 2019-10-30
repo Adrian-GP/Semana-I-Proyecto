@@ -2923,6 +2923,7 @@ const Swal = require('sweetalert2')
 //Variable para mobilnet
 let net;
 let products = []
+let carrito = {}
 // CommonJS
 //Variable para webcam
 const webcamElement = document.getElementById('webcam');
@@ -2970,7 +2971,7 @@ function knnLoad() {
   
   $.getJSON("recognizer/json/products.json", function (data) {
     products = data.products;
-
+    console.log(products)
   });
   
 
@@ -2981,6 +2982,7 @@ function knnLoad() {
 function addClass(classNum){
   console.log(products[classNum])
   console.log(classNum);
+  alerta2(products[classNum].name, classNum, products[classNum].price)
 }
 
 
@@ -3056,15 +3058,12 @@ function oferta(nombre) {
 function alerta(nombre, producto, precio) {
   //se agrego este if para agregar oferta
   Swal.fire({
-    title: 'Item',
-    text: "Add this item to your shopping cart?",
-    imageUrl: producto,
-    imageWidth: 100,
-    imageHeight: 120,
+    title: nombre,
+    text: "¿Desea añadir este producto a su carrito?",
     type: 'info',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
-    confirmButtonText: 'Yes',
+    confirmButtonText: 'Si',
     cancelButtonText: 'No',
     cancelButtonColor: '#d33'
   }).then((result) => {
@@ -3086,6 +3085,56 @@ function alerta(nombre, producto, precio) {
   })
 }
 
+//función para lanzar la alerta
+function alerta2(nombre, producto, precio) {
+  //se agrego este if para agregar oferta
+  Swal.fire({
+    title: nombre,
+    text: "¿Desea añadir este producto a su carrito?",
+    type: 'info',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    confirmButtonText: 'Si',
+    cancelButtonText: 'No',
+    cancelButtonColor: '#d33'
+  }).then((result) => {
+    if (result.value) {
+      Swal.fire(
+        'Ok!',
+        'Your product has been added!',
+        'success'
+      )
+      total = total + precio;
+      total = toFixed(total, 2);
+      document.getElementById('total').innerText = `
+      Total: $${total}`;
+      if(!carrito[producto])
+        {
+          carrito[producto] = {name: nombre, price: precio, quantity: 1}
+        }
+      else{
+        carrito[producto].quantity++;
+      }
+      generateTable();
+    }
+  })
+}
+
+
+function generateTable(){
+  let newTableRows = "";
+  console.log("Carrito:");
+  console.log(carrito);
+
+  table = document.getElementById('productId').innerHTML=""
+  Object.keys(carrito).forEach((key) => {
+    newTableRows += "<tr><th>"+parseInt((parseInt(key)+1))+"</th><td>"+carrito[key].name+"</td><td>"+carrito[key].price+"</td><td>"+carrito[key].quantity+"</td></tr>";
+  });
+  console.log(newTableRows);
+  //table.innerHTML = newTableRows;
+  $("#productId").append(newTableRows);
+
+}
 app();
 
 },{"sweetalert2":1}]},{},[2]);

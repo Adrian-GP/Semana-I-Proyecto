@@ -34,15 +34,29 @@
                     <video autoplay playsinline muted id="webcam" width="600" height="400"></video>
                 </div>
             </div>
-            <div class="col-xl-5 col-lg-12 offset-xl-1" style="border:solid;">
-                <div id='fotos'>
-                </div>
-                <div id="total"></div>
-                <div id="Lista">
-                    <ul id="items">
-
-                    </ul>
-                </div>
+            <div class="col-xl-5 col-lg-12 offset-xl-1">
+                <table class="table-dark" style="width:100%; opacity:0.8">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="productId">
+                        <tr>
+                            <th>1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                            <td> <button type="button" class="btn btn-secondary" id="increase-0">+</button>
+                                <button type="button" class="btn btn-secondary" id="decrease-0">-</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="row">
@@ -50,9 +64,10 @@
                 <div id="console" style="color:white;"></div>
             </div>
             <div class="col">
-                    <button type="button" class="btn btn-secondary" id="class-coca">Añadir clase 0</button>
-                    <button type="button" class="btn btn-secondary" id="class-andatti">Añadir clase 1</button>
-                </div>
+                <div id="total"></div>
+                <button type="button" class="btn btn-secondary" id="class-coca">Añadir clase 0</button>
+                <button type="button" class="btn btn-secondary" id="class-andatti">Añadir clase 1</button>
+            </div>
         </div>
     </div>
 
