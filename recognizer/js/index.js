@@ -86,7 +86,7 @@ async function app() {
   //Esto se agrego para predecir en cada frame
   while (true) {
     if (classifier.getNumClasses() > 0) {
-      //const img = await webcam.capture();
+      const img = await webcam.capture();
 
       // Get the activation from mobilenet from the webcam.
       const activation = net.infer(img, 'conv_preds');
