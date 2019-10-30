@@ -1,0 +1,12 @@
+{"products":[
+  { "name":"Coca-Cola", "price":12.00, "description": "600 ml" },
+  { "name":"Andatti", "price":25.00, "description": "Café americano" },
+  { "name":"Panditas", "price":14.00, "description": "Gomita de grenetina sabor fresa, naranja, piña y limón en forma de oso" },
+  { "name":"Maruchan", "price":15.00, "description": "Vaso de sopa de fideos instantanea" },
+  { "name":"Coca-cola Zero", "price":12.50, "description": "600 ml" },
+  { "name":"Emperador", "price":13.75, "description": "Galletas de chocolate" },
+  { "name":"Sabritas", "price":17.50, "description": "Botana 100% papa" },
+  { "name":"Hershey's", "price":23.50, "description": "Tamaño King Size" },
+  { "name":"Donitas Bimbo", "price":14.75, "description": "Deliciosas donitas espolvoreadas de azúcar glass" },
+  { "name":"Jumex Mango", "price":18.50, "description": "473 ml" }
+]}

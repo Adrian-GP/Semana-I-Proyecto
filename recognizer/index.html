@@ -3,12 +3,67 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <!-- Load the latest version of TensorFlow.js -->
-    <link rel="stylesheet" type="text/css" href="/style/style.css">
+    <link rel="stylesheet" type="text/css" href="/recognizer/css/styles.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="style/sweetalert2.min.css">
+    <link rel="stylesheet" href="sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link rel="stylesheet" href="animate.min.css">
+</head>
+
+<body>
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/trainer">Trainer</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Recognizer</a>
+        </li>
+    </ul>
+
+    <h1>
+        Computer vision product detector.
+    </h1>
+
+    <!-- Fotos de productos una vez son detectados -->
+
+    <div class="container" style="width:100%; padding:0; max-width:98vw;">
+        <div class="row">
+            <div class="col-5">
+                <div id='divVideo'>
+                    <video autoplay playsinline muted id="webcam" width="600" height="400"></video>
+                </div>
+            </div>
+            <div class="col" style="border:solid; margin:0 50px;">
+                <div id='fotos'>
+                </div>
+                <div id="total"></div>
+                <div id="Lista">
+                    <ul id="items">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="console" style="color:white;"></div>
+            </div>
+            <div class="col">
+                    <button type="button" class="btn btn-secondary" id="class-coca">Añadir clase 0</button>
+                    <button type="button" class="btn btn-secondary" id="class-andatti">Añadir clase 1</button>
+                </div>
+        </div>
+    </div>
+
+
+
+    <!-- Boton para predecir, se comento para detectar por frame
+      <div id='predict'>
+        <button id="predict-classes" onClick={predict}>Predict</button>
+      </div>-->
+    <!-- Etiqueta para ver la predicción -->
+
 
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://unpkg.com/@tensorflow/tfjs"></script>
@@ -18,46 +73,6 @@
     <script src="https://unpkg.com/@tensorflow/tfjs"></script>
     <script src="https://unpkg.com/@tensorflow-models/mobilenet"></script>
     <script src="https://unpkg.com/@tensorflow-models/knn-classifier"></script>
-
-    <h1>
-        Computer vision product detector.
-    </h1>
-</head>
-
-<body>
-    <div id='contenedor'>
-            <video autoplay playsinline muted id="webcam" width="600" height="400"></video>
-
-        <!--TAbla -->
-        <table>
-            <!-- Video -->
-            <tr>
-                <td>
-                    <div id='divVideo'>
-                    </div>
-                </td>
-                <!-- Fotos de productos una vez son detectados -->
-                <td>
-                    <div id='fotos'>
-                    </div>
-                    <div id="console"></div>
-                    <div id="total"></div>
-                    <div id="Lista">
-                        <ul id="items">
-
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <!-- Boton para predecir, se comento para detectar por frame
-      <div id='predict'>
-        <button id="predict-classes" onClick={predict}>Predict</button>
-      </div>-->
-    </div>
-    <!-- Etiqueta para ver la predicción -->
-
-
     <script src="https://code.jquery.com/jquery-3.4.1.js"
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -66,7 +81,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-    <script type="text/javascript" src="recognizer/js/index.js"></script>
+    <script src="bundle.js"></script>
 </body>
 
 </html>

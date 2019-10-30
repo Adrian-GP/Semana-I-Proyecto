@@ -1,8 +1,10 @@
-//Realizado el 5/31/2019
+const Swal = require('sweetalert2')
+
 
 //Variable para mobilnet
 let net;
-
+let products = []
+// CommonJS
 //Variable para webcam
 const webcamElement = document.getElementById('webcam');
 
@@ -29,23 +31,38 @@ function knnLoad() {
   $.getJSON("recognizer/json/knnClassifierTest.json", function (data) {
     console.log(data);
 
-   // let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
-   let tensorObj = data;
+    // let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
+    let empty = localStorage.getItem("asdasdasdasdddsa");
+    let tensorObj = data;
     Object.keys(tensorObj).forEach((key) => {
       tensorObj[key] = tf.tensor(tensorObj[key], [Math.floor(tensorObj[key].length / 1000), 1024]);
     });
     //covert back to tensor
     console.log(tensorObj);
     classifier.setClassifierDataset(tensorObj)
-    
+    /*Swal.fire(
+      {
+        Title: 'Bien',
+        type: 'success',
+        html: "Cargó el KNN!"
+      }
+    )*/
+  });
+  
+  $.getJSON("recognizer/json/products.json", function (data) {
+    products = data.products;
 
   });
+  
 
 
 }
 
 
-
+function addClass(classNum){
+  console.log(products[classNum])
+  console.log(classNum);
+}
 
 
 async function app() {
@@ -53,6 +70,9 @@ async function app() {
 
   // Load the model.
   net = await mobilenet.load();
+  document.getElementById('class-coca').addEventListener('click', () => addClass(0));
+  document.getElementById('class-andatti').addEventListener('click', () => addClass(1));
+
   console.log('Sucessfully loaded model');
 
   console.log('Loading Knn-classifier');
@@ -60,7 +80,7 @@ async function app() {
 
   console.log('Knn loaded');
   const webcam = await tf.data.webcam(webcamElement);
-  
+
   //Esto se agrego para predecir en cada frame
   while (true) {
     if (classifier.getNumClasses() > 0) {
@@ -109,7 +129,7 @@ function toFixed(num, fixed) {
 
 //función para agregar oferta a un producto
 function oferta(nombre) {
-  Swal.fire('Product ' + ' 2 for 1 sale!');
+  swal.fire('Product ' + ' 2 for 1 sale!');
 }
 
 

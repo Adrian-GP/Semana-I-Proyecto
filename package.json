@@ -4,7 +4,8 @@
   "description": "This is the recognizer of Semana I's Proyect",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build":"browserify recognizer/js/index.js > bundle.js && nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,8 @@
   },
   "homepage": "https://github.com/Adrian-GP/Semana-I-Proyecto#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "requirejs": "^2.3.6",
+    "sweetalert2": "^8.18.6"
   }
 }
