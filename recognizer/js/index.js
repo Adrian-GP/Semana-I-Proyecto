@@ -28,7 +28,7 @@ function knnLoad() {
   console.log(json);*/
 
   console.log("try to get json");
-  $.getJSON("recognizer/json/knnClassifierTest.json", function (data) {
+  $.getJSON("recognizer/json/knnClassifier_BarryPotter.json", function (data) {
     console.log(data);
 
     // let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
