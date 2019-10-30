@@ -52,10 +52,10 @@ async function app() {
 async function app() {
   console.log('Loading mobilenet..');
   // Load the model.
-  net = await mobilenet.load(
-  version?: 2,
-  alpha?: 0.25 | .50 | .75 | 1.0
-)
+  net = await mobilenet.load({
+    version: 1,
+    alpha: 1.0
+  })
   console.log('Loading KNN..');
   if(localStorage.getItem("knnClassifier_BarryPotter")!=null){
     let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
