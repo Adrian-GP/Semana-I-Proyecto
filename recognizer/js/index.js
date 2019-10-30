@@ -59,7 +59,7 @@ function knnLoad() {
 }
 
 
-function addClass(classNum){
+function addClass(classNum) {
   console.log(products[classNum])
   console.log(classNum);
 }
@@ -85,7 +85,7 @@ async function app() {
   //Esto se agrego para predecir en cada frame
   while (true) {
     if (classifier.getNumClasses() > 0) {
-      const img = await webcam.capture();
+      //const img = await webcam.capture();
 
       // Get the activation from mobilenet from the webcam.
       const activation = net.infer(img, 'conv_preds');
@@ -156,8 +156,6 @@ function alerta(nombre, producto, precio) {
         'Your product has been added!',
         'success'
       )
-      total = total + precio;
-      total = toFixed(total, 2);
       document.getElementById('total').innerText = `
       Total: $${total}`;
       var node = document.createElement("li");                 // Create a <li> node

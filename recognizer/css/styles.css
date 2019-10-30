@@ -40,3 +40,10 @@ h1 {
     margin: 0 auto;
     width:fit-content;
 }
+
+#productId th{
+    vertical-align: middle !important;
+}
+#productId td{
+    vertical-align: middle !important;
+}
