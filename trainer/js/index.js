@@ -50,6 +50,8 @@ async function app() {
   }*/
 
 async function app() {
+  const webcam = await tf.data.webcam(webcamElement);
+
   console.log('Loading mobilenet..');
   // Load the model.
   net = await mobilenet.load({
@@ -70,7 +72,6 @@ async function app() {
 
   // Create an object from Tensorflow.js data API which could capture image
   // from the web camera as Tensor.
-  const webcam = await tf.data.webcam(webcamElement);
 
   var picReader = new FileReader();
 
@@ -163,6 +164,7 @@ async function app() {
   document.getElementById('class-donitas').addEventListener('click', () => addExample(7));
   document.getElementById('class-maruchan').addEventListener('click', () => addExample(8));
   document.getElementById('class-jumex').addEventListener('click', () => addExample(9));
+  document.getElementById('class-background').addEventListener('click', () => addExample(10));
 
   document.getElementById('savemodel').addEventListener('click', () => save());
 
@@ -177,7 +179,7 @@ async function app() {
       // Get the most likely class and confidences from the classifier module.
       const result = await classifier.predictClass(activation);
 
-      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango'];
+      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango', 'Background'];
       document.getElementById('console').innerText = `
           prediction: ${classes[result.label]}\n
           probability: ${result.confidences[result.label]}

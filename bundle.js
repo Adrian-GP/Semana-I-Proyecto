@@ -2923,7 +2923,6 @@ const Swal = require('sweetalert2')
 //Variable para mobilnet
 let net;
 let products = []
-let carrito = {}
 // CommonJS
 //Variable para webcam
 const webcamElement = document.getElementById('webcam');
@@ -2968,12 +2967,12 @@ function knnLoad() {
       }
     )*/
   });
-  
+
   $.getJSON("recognizer/json/products.json", function (data) {
     products = data.products;
-    console.log(products)
+
   });
-  
+
 
 
 }
@@ -2982,11 +2981,12 @@ function knnLoad() {
 function addClass(classNum){
   console.log(products[classNum])
   console.log(classNum);
-  alerta2(products[classNum].name, classNum, products[classNum].price)
 }
 
 
 async function app() {
+  const webcam = await tf.data.webcam(webcamElement);
+
   console.log('Loading mobilenet..');
 
   // Load the model.
@@ -3000,7 +3000,6 @@ async function app() {
   knnLoad();
 
   console.log('Knn loaded');
-  const webcam = await tf.data.webcam(webcamElement);
 
   //Esto se agrego para predecir en cada frame
   while (true) {
@@ -3012,7 +3011,7 @@ async function app() {
       // Get the most likely class and confidences from the classifier module.
       const result = await classifier.predictClass(activation);
 
-      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango'];
+      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango','Background'];
       document.getElementById('console').innerText = `
           prediction: ${classes[result.label]}\n
           probability: ${result.confidences[result.label]}
@@ -3058,12 +3057,15 @@ function oferta(nombre) {
 function alerta(nombre, producto, precio) {
   //se agrego este if para agregar oferta
   Swal.fire({
-    title: nombre,
-    text: "¿Desea añadir este producto a su carrito?",
+    title: 'Item',
+    text: "Add this item to your shopping cart?",
+    imageUrl: producto,
+    imageWidth: 100,
+    imageHeight: 120,
     type: 'info',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
-    confirmButtonText: 'Si',
+    confirmButtonText: 'Yes',
     cancelButtonText: 'No',
     cancelButtonColor: '#d33'
   }).then((result) => {
@@ -3085,56 +3087,6 @@ function alerta(nombre, producto, precio) {
   })
 }
 
-//función para lanzar la alerta
-function alerta2(nombre, producto, precio) {
-  //se agrego este if para agregar oferta
-  Swal.fire({
-    title: nombre,
-    text: "¿Desea añadir este producto a su carrito?",
-    type: 'info',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    confirmButtonText: 'Si',
-    cancelButtonText: 'No',
-    cancelButtonColor: '#d33'
-  }).then((result) => {
-    if (result.value) {
-      Swal.fire(
-        'Ok!',
-        'Your product has been added!',
-        'success'
-      )
-      total = total + precio;
-      total = toFixed(total, 2);
-      document.getElementById('total').innerText = `
-      Total: $${total}`;
-      if(!carrito[producto])
-        {
-          carrito[producto] = {name: nombre, price: precio, quantity: 1}
-        }
-      else{
-        carrito[producto].quantity++;
-      }
-      generateTable();
-    }
-  })
-}
-
-
-function generateTable(){
-  let newTableRows = "";
-  console.log("Carrito:");
-  console.log(carrito);
-
-  table = document.getElementById('productId').innerHTML=""
-  Object.keys(carrito).forEach((key) => {
-    newTableRows += "<tr><th>"+parseInt((parseInt(key)+1))+"</th><td>"+carrito[key].name+"</td><td>"+carrito[key].price+"</td><td>"+carrito[key].quantity+"</td></tr>";
-  });
-  console.log(newTableRows);
-  //table.innerHTML = newTableRows;
-  $("#productId").append(newTableRows);
-
-}
 app();
 
 },{"sweetalert2":1}]},{},[2]);
