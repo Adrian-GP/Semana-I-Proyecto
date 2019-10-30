@@ -49,18 +49,18 @@ function knnLoad() {
       }
     )*/
   });
-  
+
   $.getJSON("recognizer/json/products.json", function (data) {
     products = data.products;
     console.log(products)
   });
-  
+
 
 
 }
 
 
-function addClass(classNum){
+function addClass(classNum) {
   console.log(products[classNum])
   console.log(classNum);
   alerta2(products[classNum].name, classNum, products[classNum].price)
@@ -86,7 +86,7 @@ async function app() {
   //Esto se agrego para predecir en cada frame
   while (true) {
     if (classifier.getNumClasses() > 0) {
-      const img = await webcam.capture();
+      //const img = await webcam.capture();
 
       // Get the activation from mobilenet from the webcam.
       const activation = net.infer(img, 'conv_preds');
@@ -154,8 +154,6 @@ function alerta(nombre, producto, precio) {
         'Your product has been added!',
         'success'
       )
-      total = total + precio;
-      total = toFixed(total, 2);
       document.getElementById('total').innerText = `
       Total: $${total}`;
       var node = document.createElement("li");                 // Create a <li> node
@@ -185,15 +183,10 @@ function alerta2(nombre, producto, precio) {
         'Your product has been added!',
         'success'
       )
-      total = total + precio;
-      total = toFixed(total, 2);
-      document.getElementById('total').innerText = `
-      Total: $${total}`;
-      if(!carrito[producto])
-        {
-          carrito[producto] = {name: nombre, price: precio, quantity: 1}
-        }
-      else{
+      if (!carrito[producto]) {
+        carrito[producto] = { name: nombre, price: precio, quantity: 1 }
+      }
+      else {
         carrito[producto].quantity++;
       }
       generateTable();
@@ -202,18 +195,46 @@ function alerta2(nombre, producto, precio) {
 }
 
 
-function generateTable(){
+function generateTable() {
   let newTableRows = "";
   console.log("Carrito:");
   console.log(carrito);
-
-  table = document.getElementById('productId').innerHTML=""
+  total = 0;
+  table = document.getElementById('productId').innerHTML = ""
   Object.keys(carrito).forEach((key) => {
-    newTableRows += "<tr><th>"+parseInt((parseInt(key)+1))+"</th><td>"+carrito[key].name+"</td><td>"+carrito[key].price+"</td><td>"+carrito[key].quantity+"</td></tr>";
+    total+= carrito[key].price * carrito[key].quantity;
+    newTableRows += "<tr><th>" + parseInt((parseInt(key) + 1)) + "</th><td>" + carrito[key].name + "</td><td>$ " + carrito[key].price.toFixed(2) + "</td><td>" + carrito[key].quantity + "</td><td><button type=\"button\" class=\"btn btn-secondary\" id=\"increase-" + key + "\">+</button><button type=\"button\" class=\"btn btn-secondary\" id=\"decrease-" + key + "\">-</button>" +"</td><td><button type=\"button\" class=\"btn btn-danger\" id=\"delete-" + key + "\">X</button></td></tr>";
   });
   console.log(newTableRows);
   //table.innerHTML = newTableRows;
+  newTableRows += "<tr><th></th><td>Total de la orden:</td><td></td><td></td><td>$"+total.toFixed(2)+"</td><td></td></tr>";
   $("#productId").append(newTableRows);
 
+  Object.keys(carrito).forEach((key) => {
+    document.getElementById('increase-' + key).addEventListener('click', () => changeQuantity(key, true));
+    document.getElementById('decrease-' + key).addEventListener('click', () => changeQuantity(key, false));
+    document.getElementById('delete-' + key).addEventListener('click', () => deleteCarrito(key));
+  });
+}
+
+function recalculateTotal(){
+
+}
+
+function deleteCarrito(key){
+  delete carrito[key]
+  generateTable();
+}
+function changeQuantity(key, DecIn) {
+  if (DecIn)
+    {
+      carrito[key].quantity++;
+      generateTable();
+    }
+  else if (!DecIn && carrito[key].quantity > 1)
+    {
+      carrito[key].quantity--;
+      generateTable()
+    }
 }
 app();
