@@ -6,7 +6,7 @@
   { "name":"Emperador", "price":13.75, "description": "Galletas de chocolate" },
   { "name":"Hershey's", "price":23.50, "description": "Tamaño King Size" },
   { "name":"Panditas", "price":14.00, "description": "Gomita de grenetina sabor fresa, naranja, piña y limón en forma de oso" },
-  { "name":"Donitas Bimbo", "price":14.75, "description": "Deliciosas donitas espolvoreadas de azúcar glass" },
-  { "name":"Maruchan", "price":15.00, "description": "Vaso de sopa de fideos instantanea" },
+  { "name":"Donas Bimbo", "price":14.75, "description": "Deliciosas donitas espolvoreadas de azúcar glass" },
+  { "name":"Sopa Nissin", "price":15.00, "description": "Vaso de sopa de fideos instantanea" },
   { "name":"Jumex Mango", "price":18.50, "description": "473 ml" }
 ]}

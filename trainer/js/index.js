@@ -2,8 +2,20 @@ const classifier = knnClassifier.create();
 
 const webcamElement = document.getElementById('webcam');
 
+let classes = []
 let net;
 
+$.getJSON("recognizer/json/products.json", function (data) {
+  products = data.products;
+  let dropOptions = "";
+  console.log(products)
+  Object.keys(products).forEach((key) => {
+    dropOptions += "<option value=\"" + key + "\">" + products[key].name + "</option>"
+    classes.push(products[key].name)
+  });
+  $("#drop-down-elem").append(dropOptions);
+
+});
 
 // Función de app para predicción de imágenes.
 /*
@@ -49,37 +61,37 @@ async function app() {
     }
   }*/
 
-  //Esta función cargara al elemento knn los pesos previamente obtenidos en el trainer. hint: usar función setClassifierDataset
-  function knnLoad() {
-    //can be change to other source
-    console.log("Initiation of KNN Load");
-    /*let json = localStorage.getItem("knnClassifier_BarryPotter");
-    console.log(json);*/
+//Esta función cargara al elemento knn los pesos previamente obtenidos en el trainer. hint: usar función setClassifierDataset
+function knnLoad() {
+  //can be change to other source
+  console.log("Initiation of KNN Load");
+  /*let json = localStorage.getItem("knnClassifier_BarryPotter");
+  console.log(json);*/
 
-    console.log("try to get json");
-    $.getJSON("recognizer/json/knnClassifier_BarryPotter.json", function (data) {
-      console.log(data);
+  console.log("try to get json");
+  $.getJSON("recognizer/json/knnClassifier_BarryPotter.json", function (data) {
+    console.log(data);
 
-      // let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
-      let empty = localStorage.getItem("asdasdasdasdddsa");
-      let tensorObj = data;
-      Object.keys(tensorObj).forEach((key) => {
-        tensorObj[key] = tf.tensor(tensorObj[key], [Math.floor(tensorObj[key].length / 1000), 1024]);
-      });
-      //covert back to tensor
-      console.log(tensorObj);
-      classifier.setClassifierDataset(tensorObj)
-      /*Swal.fire(
-        {
-          Title: 'Bien',
-          type: 'success',
-          html: "Cargó el KNN!"
-        }
-      )*/
+    // let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
+    let empty = localStorage.getItem("asdasdasdasdddsa");
+    let tensorObj = data;
+    Object.keys(tensorObj).forEach((key) => {
+      tensorObj[key] = tf.tensor(tensorObj[key], [Math.floor(tensorObj[key].length / 1000), 1024]);
     });
+    //covert back to tensor
+    console.log(tensorObj);
+    classifier.setClassifierDataset(tensorObj)
+    /*Swal.fire(
+      {
+        Title: 'Bien',
+        type: 'success',
+        html: "Cargó el KNN!"
+      }
+    )*/
+  });
 
 
-  }
+}
 
 async function app() {
   const webcam = await tf.data.webcam(webcamElement);
@@ -157,9 +169,13 @@ async function app() {
   };
   // Reads an image from the webcam and associates it with a specific class
   // index.
-  const addExample = async classId => {
+  const addExample = async unimportant=> {
     // Capture an image from the web camera.
     const img = await webcam.capture();
+    var dropdown = document.getElementById("drop-down-elem")
+
+    let classId = dropdown.options[dropdown.selectedIndex].value;
+
     //console.log();
 
     // Get the intermediate activation of MobileNet 'conv_preds' and pass that
@@ -178,17 +194,8 @@ async function app() {
 
   // When clicking a button, add an example for that class.
   //document.getElementById('class-b').addEventListener('click', () => addExample(1));
-  document.getElementById('class-coca').addEventListener('click', () => addExample(0));
-  document.getElementById('class-andatti').addEventListener('click', () => addExample(1));
-  document.getElementById('class-coca-zero').addEventListener('click', () => addExample(2));
-  document.getElementById('class-sabritas').addEventListener('click', () => addExample(3));
-  document.getElementById('class-emperador').addEventListener('click', () => addExample(4));
-  document.getElementById('class-hersheys').addEventListener('click', () => addExample(5));
-  document.getElementById('class-panditas').addEventListener('click', () => addExample(6));
-  document.getElementById('class-donitas').addEventListener('click', () => addExample(7));
-  document.getElementById('class-maruchan').addEventListener('click', () => addExample(8));
-  document.getElementById('class-jumex').addEventListener('click', () => addExample(9));
-  document.getElementById('class-background').addEventListener('click', () => addExample(10));
+  document.getElementById('add-class').addEventListener('click', () => addExample(null));
+
 
   document.getElementById('savemodel').addEventListener('click', () => save());
 
@@ -203,7 +210,6 @@ async function app() {
       // Get the most likely class and confidences from the classifier module.
       const result = await classifier.predictClass(activation);
 
-      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango', 'Background'];
       document.getElementById('console').innerText = `
           prediction: ${classes[result.label]}\n
           probability: ${result.confidences[result.label]}
@@ -244,12 +250,12 @@ function saveData(text, name) {
   a.click();
 }
 
-function resizeImage(image){
-    var canvas = document.createElement("canvas");
-    var ctx = canvas.getContext('2d');
-    img = new Image();
-    img.addEventListener('load', function () {
-      ctx.drawImage(this, 0, 0, 600, 400);
-      return ctx.getImageData();
-    });
+function resizeImage(image) {
+  var canvas = document.createElement("canvas");
+  var ctx = canvas.getContext('2d');
+  img = new Image();
+  img.addEventListener('load', function () {
+    ctx.drawImage(this, 0, 0, 600, 400);
+    return ctx.getImageData();
+  });
 }

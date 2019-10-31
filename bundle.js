@@ -2919,6 +2919,7 @@ if (typeof this !== 'undefined' && this.Sweetalert2){  this.swal = this.sweetAle
 },{}],2:[function(require,module,exports){
 const Swal = require('sweetalert2')
 
+let classes = []
 const haveAlert = false;
 //Variable para mobilnet
 let net;
@@ -2971,6 +2972,9 @@ function knnLoad() {
 
   $.getJSON("recognizer/json/products.json", function (data) {
     products = data.products;
+    Object.keys(products).forEach((key) => {
+      classes.push(products[key].name)
+    });
     console.log(products)
   });
 
@@ -3010,9 +3014,8 @@ async function app() {
       // Get the activation from mobilenet from the webcam.
       const activation = net.infer(img, 'conv_preds');
       // Get the most likely class and confidences from the classifier module.
-      const result = await classifier.predictClass(activation);
-
-      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango', 'Background'];
+      const result = await classifier.predictClass(activation, 5);
+      console.log(classes);
       document.getElementById('console').innerText = `
           prediction: ${classes[result.label]}\n
           probability: ${result.confidences[result.label]}

@@ -1,5 +1,6 @@
 const Swal = require('sweetalert2')
 
+let classes = []
 const haveAlert = false;
 //Variable para mobilnet
 let net;
@@ -52,6 +53,9 @@ function knnLoad() {
 
   $.getJSON("recognizer/json/products.json", function (data) {
     products = data.products;
+    Object.keys(products).forEach((key) => {
+      classes.push(products[key].name)
+    });
     console.log(products)
   });
 
@@ -92,8 +96,7 @@ async function app() {
       const activation = net.infer(img, 'conv_preds');
       // Get the most likely class and confidences from the classifier module.
       const result = await classifier.predictClass(activation, 5);
-
-      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango', 'Background'];
+      console.log(classes);
       document.getElementById('console').innerText = `
           prediction: ${classes[result.label]}\n
           probability: ${result.confidences[result.label]}
