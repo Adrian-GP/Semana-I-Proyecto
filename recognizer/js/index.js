@@ -91,7 +91,7 @@ async function app() {
       // Get the activation from mobilenet from the webcam.
       const activation = net.infer(img, 'conv_preds');
       // Get the most likely class and confidences from the classifier module.
-      const result = await classifier.predictClass(activation);
+      const result = await classifier.predictClass(activation, 5);
 
       const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango','Background'];
       document.getElementById('console').innerText = `
