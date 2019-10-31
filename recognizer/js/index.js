@@ -14,7 +14,7 @@ const classifier = knnClassifier.create();
 
 //Variable Total para el precio
 let total = 0.0;
-
+let time = new Date(99, 11, 24)
 
 let flag = true;
 var wait = ms => new Promise((r, j) => setTimeout(r, ms))
@@ -72,8 +72,8 @@ async function app() {
 
   // Load the model.
   net = await mobilenet.load();
-  document.getElementById('class-coca').addEventListener('click', () => addClass(0));
-  document.getElementById('class-andatti').addEventListener('click', () => addClass(1));
+  //document.getElementById('class-coca').addEventListener('click', () => addClass(0));
+  //document.getElementById('class-andatti').addEventListener('click', () => addClass(1));
 
   console.log('Sucessfully loaded model');
 
@@ -86,18 +86,23 @@ async function app() {
   //Esto se agrego para predecir en cada frame
   while (true) {
     if (classifier.getNumClasses() > 0) {
-      //const img = await webcam.capture();
+      const img = await webcam.capture();
 
       // Get the activation from mobilenet from the webcam.
       const activation = net.infer(img, 'conv_preds');
       // Get the most likely class and confidences from the classifier module.
       const result = await classifier.predictClass(activation);
 
-      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango'];
+      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango','Background'];
       document.getElementById('console').innerText = `
           prediction: ${classes[result.label]}\n
           probability: ${result.confidences[result.label]}
         `;
+      await wait(200);
+      if(result.confidences[result.label]>0.7 && classes[result.label]!="Background"){
+        addClass(result.label);
+        await wait(3000);
+      }
 
       // Dispose the tensor to release the memory.
       img.dispose();
