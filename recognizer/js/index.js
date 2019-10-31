@@ -202,7 +202,7 @@ function alerta2(nombre, producto, precio) {
     })
   }
   else {
-    console.log("No hay alert, pero se encontró el producto: "+nombre);
+    console.log("No hay alert, pero se encontró el producto: " + nombre);
     if (!carrito[producto]) {
       carrito[producto] = { name: nombre, price: precio, quantity: 1 }
     }
@@ -231,23 +231,28 @@ function generateTable() {
 
   let totalDiscount = 0
   Object.keys(deals).forEach((key) => {
-      keys = deals[key].keys
-      quantities = deals[key].quantities
+    keys = deals[key].keys
+    quantities = deals[key].quantities
 
-      let mini = 10000
-      let posible = true
-      for(let i = 0; i<keys.length; i++){
-        if(carrito[keys[i]]) mini = Math.min(Math.floor(carrito[keys[i]].quantity/quantities[i]),mini)
-        else posible = false
-      }
-      if(mini!=10000 && posible){
-        totalDiscount += mini*deals[key].discount
-        newTableRows += "<tr><th></th><td>" + deals[key].name + "</td><td>$-" + deals[key].discount.toFixed(2) + "</td><td>" + mini + "</td><td></td><td></td></tr>";
-      }
+    let mini = 10000
+    let posible = true
+    for (let i = 0; i < keys.length; i++) {
+      if (carrito[keys[i]]) mini = Math.min(Math.floor(carrito[keys[i]].quantity / quantities[i]), mini)
+      else posible = false
+    }
+    if (mini != 10000 && posible) {
+      totalDiscount += mini * deals[key].discount
+      newTableRows += "<tr><th></th><td>" + deals[key].name + "</td><td>$-" + deals[key].discount.toFixed(2) + "</td><td>" + mini + "</td><td></td><td></td></tr>";
+    }
   });
-  
-  newTableRows += "<tr><th></th><td>Total de la orden:</td><td></td><td></td><td>$" + (total.toFixed(2)-totalDiscount) + "</td><td></td></tr>";
+
+  newTableRows += "<tr><th></th><td>Total de la orden:</td><td></td><td></td><td>$" + (total.toFixed(2) - totalDiscount) + "</td><td></td></tr>";
   $("#productId").append(newTableRows);
+  Object.keys(carrito).forEach((key) => {
+    document.getElementById('increase-' + key).addEventListener('click', () => changeQuantity(key, true));
+    document.getElementById('decrease-' + key).addEventListener('click', () => changeQuantity(key, false));
+    document.getElementById('delete-' + key).addEventListener('click', () => deleteCarrito(key));
+  });
 }
 
 function extractQuantities() {
