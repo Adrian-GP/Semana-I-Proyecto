@@ -192,10 +192,31 @@ async function app() {
     img.dispose();
   };
 
+  const addBg = async unimportant=> {
+    // Capture an image from the web camera.
+    const img = await webcam.capture();
+
+    let classId = 10
+
+    //console.log();
+
+    // Get the intermediate activation of MobileNet 'conv_preds' and pass that
+    // to the KNN classifier.
+    const activation = net.infer(img, 'conv_preds');
+
+    console.log("Added example with classId: " + classId);
+    //console.log(img);
+
+    // Pass the intermediate activation to the classifier.
+    classifier.addExample(activation, classId);
+
+    // Dispose the tensor to release the memory.
+    img.dispose();
+  };
   // When clicking a button, add an example for that class.
   //document.getElementById('class-b').addEventListener('click', () => addExample(1));
   document.getElementById('add-class').addEventListener('click', () => addExample(null));
-
+  document.getElementById('class-background').addEventListener('click', () => addBg(null));
 
   document.getElementById('savemodel').addEventListener('click', () => save());
 
