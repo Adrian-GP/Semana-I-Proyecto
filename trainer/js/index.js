@@ -49,6 +49,38 @@ async function app() {
     }
   }*/
 
+  //Esta función cargara al elemento knn los pesos previamente obtenidos en el trainer. hint: usar función setClassifierDataset
+  function knnLoad() {
+    //can be change to other source
+    console.log("Initiation of KNN Load");
+    /*let json = localStorage.getItem("knnClassifier_BarryPotter");
+    console.log(json);*/
+
+    console.log("try to get json");
+    $.getJSON("recognizer/json/knnClassifier_BarryPotter.json", function (data) {
+      console.log(data);
+
+      // let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
+      let empty = localStorage.getItem("asdasdasdasdddsa");
+      let tensorObj = data;
+      Object.keys(tensorObj).forEach((key) => {
+        tensorObj[key] = tf.tensor(tensorObj[key], [Math.floor(tensorObj[key].length / 1000), 1024]);
+      });
+      //covert back to tensor
+      console.log(tensorObj);
+      classifier.setClassifierDataset(tensorObj)
+      /*Swal.fire(
+        {
+          Title: 'Bien',
+          type: 'success',
+          html: "Cargó el KNN!"
+        }
+      )*/
+    });
+
+
+  }
+
 async function app() {
   const webcam = await tf.data.webcam(webcamElement);
 
@@ -58,16 +90,8 @@ async function app() {
     version: 1,
     alpha: 1.0
   })
-  console.log('Loading KNN..');
-  if(localStorage.getItem("knnClassifier_BarryPotter")!=null){
-    let tensorObj = JSON.parse(localStorage.getItem("knnClassifier_BarryPotter"));
-    Object.keys(tensorObj).forEach((key) => {
-      tensorObj[key] = tf.tensor(tensorObj[key], [Math.floor(tensorObj[key].length / 1000), 1024]);
-    });
-    //covert back to tensor
-    classifier.setClassifierDataset(tensorObj)
-    console.log("Retrieved something.");
-  }
+  console.log('Loading Knn-classifier');
+  knnLoad();
   console.log('Successfully loaded model');
 
   // Create an object from Tensorflow.js data API which could capture image
