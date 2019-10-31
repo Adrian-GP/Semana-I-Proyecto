@@ -102,7 +102,7 @@ async function app() {
       await wait(200);
       if (result.confidences[result.label] > 0.7 && classes[result.label] != "Background" && classes[result.label]) {
         addClass(result.label);
-        await wait(3000);
+        await wait(2500);
       }
 
       // Dispose the tensor to release the memory.
