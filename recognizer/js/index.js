@@ -1,6 +1,6 @@
 const Swal = require('sweetalert2')
 
-
+const haveAlert = false;
 //Variable para mobilnet
 let net;
 let products = []
@@ -93,13 +93,13 @@ async function app() {
       // Get the most likely class and confidences from the classifier module.
       const result = await classifier.predictClass(activation);
 
-      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango','Background'];
+      const classes = ['Coca Cola', 'Andatti', 'Coca Cola Zero', 'Sabritas', 'Emperador', 'Hersheys', 'Panditas', 'Donitas', 'Maruchan', 'Jumex de Mango', 'Background'];
       document.getElementById('console').innerText = `
           prediction: ${classes[result.label]}\n
           probability: ${result.confidences[result.label]}
         `;
       await wait(200);
-      if(result.confidences[result.label]>0.7 && classes[result.label]!="Background"){
+      if (result.confidences[result.label] > 0.7 && classes[result.label] != "Background") {
         addClass(result.label);
         await wait(3000);
       }
@@ -172,31 +172,44 @@ function alerta(nombre, producto, precio) {
 //función para lanzar la alerta
 function alerta2(nombre, producto, precio) {
   //se agrego este if para agregar oferta
-  Swal.fire({
-    title: nombre,
-    text: "¿Desea añadir este producto a su carrito?",
-    type: 'info',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    confirmButtonText: 'Si',
-    cancelButtonText: 'No',
-    cancelButtonColor: '#d33'
-  }).then((result) => {
-    if (result.value) {
-      Swal.fire(
-        'Ok!',
-        'Your product has been added!',
-        'success'
-      )
-      if (!carrito[producto]) {
-        carrito[producto] = { name: nombre, price: precio, quantity: 1 }
+  console.log("Leyó un producto de nombre: " + nombre);
+  if (haveAlert) {
+    Swal.fire({
+      title: nombre,
+      text: "¿Desea añadir este producto a su carrito?",
+      type: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No',
+      cancelButtonColor: '#d33'
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          'Ok!',
+          'Your product has been added!',
+          'success'
+        )
+        if (!carrito[producto]) {
+          carrito[producto] = { name: nombre, price: precio, quantity: 1 }
+        }
+        else {
+          carrito[producto].quantity++;
+        }
+        generateTable();
       }
-      else {
-        carrito[producto].quantity++;
-      }
-      generateTable();
+    })
+  }
+  else {
+    console.log("No hay alert, pero se encontró el producto: "+nombre);
+    if (!carrito[producto]) {
+      carrito[producto] = { name: nombre, price: precio, quantity: 1 }
     }
-  })
+    else {
+      carrito[producto].quantity++;
+    }
+    generateTable();
+  }
 }
 
 
@@ -207,12 +220,12 @@ function generateTable() {
   total = 0;
   table = document.getElementById('productId').innerHTML = ""
   Object.keys(carrito).forEach((key) => {
-    total+= carrito[key].price * carrito[key].quantity;
-    newTableRows += "<tr><th>" + parseInt((parseInt(key) + 1)) + "</th><td>" + carrito[key].name + "</td><td>$ " + carrito[key].price.toFixed(2) + "</td><td>" + carrito[key].quantity + "</td><td><button type=\"button\" class=\"btn btn-secondary\" id=\"increase-" + key + "\">+</button><button type=\"button\" class=\"btn btn-secondary\" id=\"decrease-" + key + "\">-</button>" +"</td><td><button type=\"button\" class=\"btn btn-danger\" id=\"delete-" + key + "\">X</button></td></tr>";
+    total += carrito[key].price * carrito[key].quantity;
+    newTableRows += "<tr><th>" + parseInt((parseInt(key) + 1)) + "</th><td>" + carrito[key].name + "</td><td>$ " + carrito[key].price.toFixed(2) + "</td><td>" + carrito[key].quantity + "</td><td><button type=\"button\" class=\"btn btn-secondary\" id=\"increase-" + key + "\">+</button><button type=\"button\" class=\"btn btn-secondary\" id=\"decrease-" + key + "\">-</button>" + "</td><td><button type=\"button\" class=\"btn btn-danger\" id=\"delete-" + key + "\">X</button></td></tr>";
   });
   console.log(newTableRows);
   //table.innerHTML = newTableRows;
-  newTableRows += "<tr><th></th><td>Total de la orden:</td><td></td><td></td><td>$"+total.toFixed(2)+"</td><td></td></tr>";
+  newTableRows += "<tr><th></th><td>Total de la orden:</td><td></td><td></td><td>$" + total.toFixed(2) + "</td><td></td></tr>";
   $("#productId").append(newTableRows);
 
   Object.keys(carrito).forEach((key) => {
@@ -222,24 +235,22 @@ function generateTable() {
   });
 }
 
-function recalculateTotal(){
+function recalculateTotal() {
 
 }
 
-function deleteCarrito(key){
+function deleteCarrito(key) {
   delete carrito[key]
   generateTable();
 }
 function changeQuantity(key, DecIn) {
-  if (DecIn)
-    {
-      carrito[key].quantity++;
-      generateTable();
-    }
-  else if (!DecIn && carrito[key].quantity > 1)
-    {
-      carrito[key].quantity--;
-      generateTable()
-    }
+  if (DecIn) {
+    carrito[key].quantity++;
+    generateTable();
+  }
+  else if (!DecIn && carrito[key].quantity > 1) {
+    carrito[key].quantity--;
+    generateTable()
+  }
 }
 app();
