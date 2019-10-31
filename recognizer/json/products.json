@@ -9,4 +9,6 @@
   { "name":"Donas Bimbo", "price":14.75, "description": "Deliciosas donitas espolvoreadas de azúcar glass" },
   { "name":"Sopa Nissin", "price":15.00, "description": "Vaso de sopa de fideos instantanea" },
   { "name":"Jumex Mango", "price":18.50, "description": "473 ml" }
-]}
+],
+"deals":[
+  { "keys":[0,3], "quantities": [1,1], "discount": 6.00, "name":"Pa la fiesta"}]}

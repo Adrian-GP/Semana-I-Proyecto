@@ -2924,7 +2924,15 @@ const haveAlert = false;
 //Variable para mobilnet
 let net;
 let products = []
+let deals = []
 let carrito = {}
+$.getJSON("recognizer/json/products.json", function (data) {
+  products = data.products;
+  deals = data.deals;
+  Object.keys(products).forEach((key) => {
+    classes.push(products[key].name)
+  });
+});
 // CommonJS
 //Variable para webcam
 const webcamElement = document.getElementById('webcam');
@@ -2970,16 +2978,6 @@ function knnLoad() {
     )*/
   });
 
-  $.getJSON("recognizer/json/products.json", function (data) {
-    products = data.products;
-    Object.keys(products).forEach((key) => {
-      classes.push(products[key].name)
-    });
-    console.log(products)
-  });
-
-
-
 }
 
 
@@ -3021,7 +3019,7 @@ async function app() {
           probability: ${result.confidences[result.label]}
         `;
       await wait(200);
-      if (result.confidences[result.label] > 0.7 && classes[result.label] != "Background") {
+      if (result.confidences[result.label] > 0.7 && classes[result.label] != "Background" && classes[result.label]) {
         addClass(result.label);
         await wait(3000);
       }
@@ -3136,6 +3134,7 @@ function alerta2(nombre, producto, precio) {
 
 
 function generateTable() {
+  let copyQuantities = extractQuantities(carrito)
   let newTableRows = "";
   console.log("Carrito:");
   console.log(carrito);
@@ -3145,20 +3144,37 @@ function generateTable() {
     total += carrito[key].price * carrito[key].quantity;
     newTableRows += "<tr><th>" + parseInt((parseInt(key) + 1)) + "</th><td>" + carrito[key].name + "</td><td>$ " + carrito[key].price.toFixed(2) + "</td><td>" + carrito[key].quantity + "</td><td><button type=\"button\" class=\"btn btn-secondary\" id=\"increase-" + key + "\">+</button><button type=\"button\" class=\"btn btn-secondary\" id=\"decrease-" + key + "\">-</button>" + "</td><td><button type=\"button\" class=\"btn btn-danger\" id=\"delete-" + key + "\">X</button></td></tr>";
   });
+  console.log(copyQuantities);
   console.log(newTableRows);
   //table.innerHTML = newTableRows;
-  newTableRows += "<tr><th></th><td>Total de la orden:</td><td></td><td></td><td>$" + total.toFixed(2) + "</td><td></td></tr>";
-  $("#productId").append(newTableRows);
 
-  Object.keys(carrito).forEach((key) => {
-    document.getElementById('increase-' + key).addEventListener('click', () => changeQuantity(key, true));
-    document.getElementById('decrease-' + key).addEventListener('click', () => changeQuantity(key, false));
-    document.getElementById('delete-' + key).addEventListener('click', () => deleteCarrito(key));
+  let totalDiscount = 0
+  Object.keys(deals).forEach((key) => {
+      keys = deals[key].keys
+      quantities = deals[key].quantities
+
+      let mini = 10000
+      let posible = true
+      for(let i = 0; i<keys.length; i++){
+        if(carrito[keys[i]]) mini = Math.min(Math.floor(carrito[keys[i]].quantity/quantities[i]),mini)
+        else posible = false
+      }
+      if(mini!=10000 && posible){
+        totalDiscount += mini*deals[key].discount
+        newTableRows += "<tr><th></th><td>" + deals[key].name + "</td><td>" + deals[key].discount + "</td><td>" + mini + "</td><td>$" + total.toFixed(2) + "</td><td></td></tr>";
+      }
   });
+  
+  newTableRows += "<tr><th></th><td>Total de la orden:</td><td></td><td></td><td>$" + (total.toFixed(2)-totalDiscount) + "</td><td></td></tr>";
+  $("#productId").append(newTableRows);
 }
 
-function recalculateTotal() {
-
+function extractQuantities() {
+  let extract = {}
+  Object.keys(carrito).forEach((key) => {
+    extract.key = carrito[key].quantity
+  });
+  return extract;
 }
 
 function deleteCarrito(key) {
