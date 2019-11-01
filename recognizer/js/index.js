@@ -233,6 +233,10 @@ function generateTable() {
   //table.innerHTML = newTableRows;
 
   let totalDiscount = 0
+  let used = {}
+  for(let i = 0; i<10; i++){
+    used[i] = 0;
+  }
   Object.keys(deals).forEach((key) => {
     keys = deals[key].keys
     quantities = deals[key].quantities
@@ -240,10 +244,15 @@ function generateTable() {
     let mini = 10000
     let posible = true
     for (let i = 0; i < keys.length; i++) {
-      if (carrito[keys[i]]) mini = Math.min(Math.floor(carrito[keys[i]].quantity / quantities[i]), mini)
+      if (carrito[keys[i]]){
+        mini = Math.min(Math.max(Math.floor((carrito[keys[i]].quantity-used[keys[i]]) / quantities[i]),0), mini)
+      }
       else posible = false
     }
-    if (mini != 10000 && posible) {
+    if (mini != 10000 && mini != 0 && posible) {
+      for (let i = 0; i < keys.length; i++) {
+        used[keys[i]] += mini*quantities[i]
+      }
       totalDiscount += mini * deals[key].discount
       newTableRows += "<tr><th></th><td>" + deals[key].name + "</td><td>$ -" + deals[key].discount.toFixed(2) + "</td><td>" + mini + "</td><td></td><td></td></tr>";
     }

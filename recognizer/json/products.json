@@ -11,4 +11,6 @@
   { "name":"Jumex Mango", "price":18.50, "description": "473 ml" }
 ],
 "deals":[
-  { "keys":[0,3], "quantities": [1,1], "discount": 6.00, "name":"Pa la fiesta"}]}
+  { "keys":[0,3], "quantities": [2,1], "discount": 8.00, "name":"Pa' la fiesta!"},
+  { "keys":[1,7], "quantities": [2,1], "discount": 11.00, "name":"En la mañanita..."},
+  { "keys":[0,1,2,3,4,5,6,7,8,9], "quantities": [1,1,1,1,1,1,1,1,1,1], "discount": 50.00, "name":"Todo o nada!"}]}
