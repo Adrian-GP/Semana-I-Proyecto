@@ -70,6 +70,7 @@ function addClass(classNum) {
 
 
 async function app() {
+  generateTable();
   console.log('Loading mobilenet..');
 
   // Load the model.
@@ -84,7 +85,6 @@ async function app() {
 
   console.log('Knn loaded');
   const webcam = await tf.data.webcam(webcamElement);
-
   //Esto se agrego para predecir en cada frame
   while (true) {
     if (classifier.getNumClasses() > 0) {
@@ -94,7 +94,7 @@ async function app() {
       const activation = net.infer(img, 'conv_preds');
       // Get the most likely class and confidences from the classifier module.
       const result = await classifier.predictClass(activation, 5);
-      console.log(classes);
+      //console.log(classes);
       document.getElementById('console').innerText = `
           prediction: ${classes[result.label]}\n
           probability: ${result.confidences[result.label]}
@@ -218,15 +218,18 @@ function generateTable() {
   let copyQuantities = extractQuantities(carrito)
   let newTableRows = "";
   console.log("Carrito:");
-  console.log(carrito);
+  //console.log(carrito);
   total = 0;
   table = document.getElementById('productId').innerHTML = ""
+  table2 = document.getElementById('totalRow').innerHTML = ""
+  let cont = 1
   Object.keys(carrito).forEach((key) => {
     total += carrito[key].price * carrito[key].quantity;
-    newTableRows += "<tr><th>" + parseInt((parseInt(key) + 1)) + "</th><td>" + carrito[key].name + "</td><td>$ " + carrito[key].price.toFixed(2) + "</td><td>" + carrito[key].quantity + "</td><td><button type=\"button\" class=\"btn btn-secondary\" id=\"increase-" + key + "\">+</button><button type=\"button\" class=\"btn btn-secondary\" id=\"decrease-" + key + "\">-</button>" + "</td><td><button type=\"button\" class=\"btn btn-danger\" id=\"delete-" + key + "\">X</button></td></tr>";
+    newTableRows += "<tr><th>" + cont + "</th><td>" + carrito[key].name + "</td><td>$ " + carrito[key].price.toFixed(2) + "</td><td>" + carrito[key].quantity + "</td><td><button type=\"button\" class=\"btn btn-secondary\" id=\"increase-" + key + "\">+</button><button type=\"button\" class=\"btn btn-secondary\" id=\"decrease-" + key + "\">-</button>" + "</td><td><button type=\"button\" class=\"btn btn-danger\" id=\"delete-" + key + "\">X</button></td></tr>";
+    cont++;
   });
-  console.log(copyQuantities);
-  console.log(newTableRows);
+  //console.log(copyQuantities);
+  //console.log(newTableRows);
   //table.innerHTML = newTableRows;
 
   let totalDiscount = 0
@@ -246,8 +249,12 @@ function generateTable() {
     }
   });
 
-  newTableRows += "<tr><th></th><td>Total de la orden:</td><td></td><td></td><td>$" + (total.toFixed(2) - totalDiscount).toFixed(2) + "</td><td></td></tr>";
+  finalRow = "<tr><td></td><td style=\"font-weight:bold\">Total de la orden:</td><td></td><td></td><td style=\"font-weight:bold\">$" + (total.toFixed(2) - totalDiscount).toFixed(2) + "</td><td></td></tr>";
+  //newTableRows += finalRow
+  console.log("Llegamos aqui!");
   $("#productId").append(newTableRows);
+  $("#totalRow").append(finalRow);
+  console.log("final: " + finalRow);
   Object.keys(carrito).forEach((key) => {
     document.getElementById('increase-' + key).addEventListener('click', () => changeQuantity(key, true));
     document.getElementById('decrease-' + key).addEventListener('click', () => changeQuantity(key, false));

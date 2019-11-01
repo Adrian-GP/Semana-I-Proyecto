@@ -43,18 +43,27 @@ h1 {
 
 #productId th{
     vertical-align: middle !important;
+    text-align:center;
 }
 #productId td{
     vertical-align: middle !important;
+    text-align:center;
 }
 
 .tableFix{
   overflow-y: auto;
-  height:80vh;
+  height:70vh;
 }
 
 .tableFix thead th{
   position: sticky; top: 0;
   background-color:#444444;
   color:white;
+  border:none;
+}
+
+#totalRow td{
+  background-color: white;
+  position:sticky;
+  bottom:0;
 }
